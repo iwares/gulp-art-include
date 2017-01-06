@@ -1,0 +1,26 @@
+{
+  "name": "gulp-art-include",
+  "version": "0.1.0",
+  "description": "A gulp plugin for artTemplate.",
+  "main": "index.js",
+  "repository": "https://github.com/iwares/gulp-art-include",
+  "scripts": {
+    "test": "gulp"
+  },
+  "keywords": [
+    "gulp",
+    "art-template"
+  ],
+  "author": "Eric.Tsai",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  },
+  "dependencies": {
+    "art-template": "^3.1.1",
+    "balanced-match": "^0.4.2",
+    "concat-stream": "^1.6.0",
+    "gulp-util": "^3.0.8",
+    "through2": "^2.0.3"
+  }
+}
