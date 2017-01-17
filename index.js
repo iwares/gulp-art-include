@@ -13,6 +13,30 @@ var exports = function (options) {
 	if (typeof options !== 'object')
 		options = {};
 
+	const escapeThenRenderAndInclude = function (pathname, content, data) {
+		const reStart = /@@escape\(/;
+
+		var result = '';
+
+		var matchStart = undefined;
+		while (matchStart = reStart.exec(content)) {
+			var safeStart = matchStart.index + matchStart[0].length - 1;
+
+			var matchArg = balanced('([', '])', content.slice(safeStart));
+
+			if (matchArg && matchArg.start === 0) {
+				var before = renderAndInclude(pathname, content.slice(0, matchStart.index), data);
+				result += before + matchArg.body;
+				content = content.slice(safeStart + matchArg.end + 2);
+			} else {
+				result += renderAndInclude(pathname, content.slice(0, safeStart), data);
+				content = content.slice(safeStart);
+			}
+		}
+
+		return result += renderAndInclude(pathname, content, data);
+	};
+
 	const renderAndInclude = function (pathname, content, data) {
 		const reStart = /@@include\(/;
 		const reArgs = /[^)"\']*["\']([^"\']*)["\'](,\s*({[\s\S]*})){0,1}\s*/;
@@ -37,7 +61,7 @@ var exports = function (options) {
 				var includeContent = fs.readFileSync(includePath, 'utf-8');
 				var includeData = args[3] && JSON.parse(args[3]);
 
-				includeContent = renderAndInclude(includePath, includeContent, includeData);
+				includeContent = escapeThenRenderAndInclude(includePath, includeContent, includeData);
 
 				var before = content.slice(0, matchStart.index);
 				result += before + includeContent;
@@ -56,7 +80,7 @@ var exports = function (options) {
 			data = {};
 		file.contents = new Buffer(renderAndInclude(file.path, content, data));
 		return file;
-	}
+	};
 
 	return through.obj(function (file, enc, callback) {
 		if (file.isNull()) {

@@ -1,6 +1,6 @@
 {
   "name": "gulp-art-include",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A gulp plugin for artTemplate.",
   "main": "index.js",
   "repository": "https://github.com/iwares/gulp-art-include",
