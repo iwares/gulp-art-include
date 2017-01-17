@@ -78,7 +78,7 @@ var exports = function (options) {
 	const render = function (file, content, data) {
 		if (typeof data !== 'object')
 			data = {};
-		file.contents = new Buffer(renderAndInclude(file.path, content, data));
+		file.contents = new Buffer(escapeThenRenderAndInclude(file.path, content, data));
 		return file;
 	};
 
